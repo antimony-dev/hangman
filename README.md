@@ -1,3 +1,3 @@
 # hangman
-first python project using mysql and python turtle module.
+first python project using MySql and python turtle module.
 
