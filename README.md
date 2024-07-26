@@ -1,3 +1,3 @@
 # hangman
-first git repository.
-author shashwat bhardwaj
+first python project using mysql and python turtle module.
+
