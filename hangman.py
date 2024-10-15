@@ -1,6 +1,7 @@
 import mysql.connector as sb
 import turtle
 import random
+import sys
 window= turtle.Screen().setup(300,400)
 t = turtle.Turtle()
 print('Welcome To The Classic Game Of Hangman!')
@@ -40,38 +41,48 @@ genre=[fruits,flowers,vegetables,movies,instruments]
 word = random.choice(genre)()
 for i in range(len(word)):
     print('_', end=' ')
+
 def end():
-    input('\nPress Any Key To Exit')
-def won():
+        sys.exit()
+
+def disprecords():
+    cur.execute("select* from player")
+    final=cur.fetchall()
+    con.commit()
+    for i in final:
+        print(i)
+    end()
+
+def records(r):
     global name
-    r='won'
+    q1="insert into player (Name,Result) values ('{}','{}')".format(name,r)
+    cur.execute(q1)
+    con.commit()
+    n=input("\nPress <y> to see the previous records\nPress any other key to exit:")
+    print("\n")
+    if n.lower()=='y':
+        disprecords()
+    else:
+        end()
+
+def won():
+    print('\nThe Word Was :',word)
     print('''                  
                                  You won 👍👍👍
-                             Your Man Survived 😁.
+                               HANGMAN Survived 😁.
                               Thanks For Playing''')
-    q1="insert into player (Name,Result) values ('{}','{}')".format(name,r)
-    cur.execute(q1)
-    cur.execute("select* from player")
-    final=cur.fetchall()
-    con.commit()
-    for i in final:
-        print(i)
-    end()
+    records("won")
+
 def lost():
-    r='lost'
-    global name
+    print('\nThe Word Was :',word)
+   
+    
     print('''                     
                                   You Lost 👎👎👎
-                          Your Man Was Hanged To Death 😟.
+                          HANGMAN Was Hanged To Death 😟.
                                Thanks For Playing''')
-    q1="insert into player (Name,Result) values ('{}','{}')".format(name,r)
-    cur.execute(q1)
-    cur.execute("select* from player")
-    final=cur.fetchall()
-    con.commit()
-    for i in final:
-        print(i)
-    end()
+    records("lost")
+
 def guess(g):
     global wrong
     global correct
@@ -153,7 +164,6 @@ def guess(g):
             t.fd(60)
             t.bk(60)
             t.lt(50)
-            print('\nThe Word Was :',word)
             lost()
 def guessing(guessed):
     if (len(guessed)==len(set(word))):
